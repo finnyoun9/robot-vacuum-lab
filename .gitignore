@@ -4,3 +4,5 @@ __pycache__/
 *.png
 !pattern.png
 .DS_Store
+*.onnx
+code/calib_images/
