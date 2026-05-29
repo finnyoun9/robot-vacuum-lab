@@ -1,106 +1,145 @@
-# 学习资源汇总 — 扫地机传感器与视觉系统
+# 学习资源汇总 — 从零构建扫地机器人
 
-## 书籍
+---
 
-### 核心教材
+## Track A: STM32 嵌入式
+
+### 课程与教程
+
+| 资源 | 说明 |
+|------|------|
+| [江科大 STM32 入门教程](https://www.bilibili.com/video/BV1th411z7sn/) | GPIO/PWM/编码器/UART/I2C/ADC 全覆盖，用户正在跟学 |
+| [江科大平衡车项目](https://www.bilibili.com/video/BV1oD4y1X7qH/) | 平衡车开源项目，MPU6050+PID，用户已有全套硬件 |
+| [硬石科技 STM32 教程](https://www.bilibili.com/video/BV1CJ411R7jL/) | HAL 库开发，电机控制部分讲得好 |
+| [野火 STM32 教程](https://www.bilibili.com/video/BV1Lx411Z7Qa/) | 经典系列，外设讲解细致 |
+
+### 工具
+
+| 工具 | 用途 |
+|------|------|
+| Keil MDK | STM32 标准 IDE（Windows） |
+| STM32CubeMX | 外设初始化代码生成 |
+| 串口调试助手 | UART 通信调试 |
+| 逻辑分析仪（~30 元） | 通信协议分析 |
+
+### 参考书
+
+| 书名 | 说明 |
+|------|------|
+| 《STM32 HAL 库开发实战指南》 | 野火出版，入门首选 |
+| 《PID 控制器——从原理到实现》 | 通俗理解 PID 调参 |
+
+---
+
+## Track B: ROS2 + 导航
+
+### ROS2 核心
+
+| 资源 | 说明 |
+|------|------|
+| [ROS2 Humble 官方文档](https://docs.ros.org/en/humble/Tutorials.html) | 入门必读，Python 节点教程 |
+| [ROS2 Control 文档](https://control.ros.org/master/index.html) | 机器人控制框架 |
+| [鱼香 ROS 中文教程](https://fishros.org/) | 中文 ROS2 教程，一键安装脚本 |
+
+### SLAM / 导航
+
+| 资源 | 说明 |
+|------|------|
+| [SLAM Toolbox](https://github.com/SteveMacenski/slam_toolbox) | ROS2 上的 2D SLAM |
+| [Cartographer](https://google-cartographer-ros.readthedocs.io/) | Google 的方案，效果更好 |
+| [Nav2 文档](https://navigation.ros.org/) | ROS2 导航栈 |
+| [Cyrill Stachniss SLAM 课程](https://www.youtube.com/playlist?list=PLgnQpQtFTOGQrZ4O5QzbIHgl3b1JHimN_) | SLAM 理论，YouTube 上最系统 |
+| 《Probabilistic Robotics》(Thrun) | SLAM 和状态估计圣经 |
+
+### 树莓派
+
+| 资源 | 说明 |
+|------|------|
+| [树莓派 5 官方文档](https://www.raspberrypi.com/documentation/) | 硬件、系统烧录 |
+| [Raspberry Pi Imager](https://www.raspberrypi.com/software/) | 烧录 Ubuntu 22.04 Server |
+| Ubuntu 22.04 ARM64 镜像 | 用于 Pi 5，直接在 Imager 里选 |
+
+---
+
+## Track C: 感知（传感器 + 视觉）
+
+### 书籍
 
 | 书名 | 作者 | 适合阶段 | 说明 |
 |------|------|---------|------|
-| 《机器视觉》 | 张广军 | Phase 2 | 中文教材，结构光/线激光/双目最扎实的一本 |
-| 《计算机视觉：算法与应用》 | Szeliski | Phase 3,5 | 领域圣经，多视角几何与立体视觉部分 |
-| 《Probabilistic Robotics》 | Thrun | Phase 3 | SLAM 和状态估计圣经，占据栅格建图必读 |
-| 《机器人学中的状态估计》 | Barfoot | Phase 3,7 | 中文译本，传感器融合理论基础 |
-| 《Multiple View Geometry》 | Hartley & Zisserman | Phase 5 | 多视角几何参考书，难度较高 |
-| 《学习 OpenCV 3》 | Kaehler & Bradski | Phase 1-2 | OpenCV 工具书 |
+| 《机器视觉》 | 张广军 | C2 | 结构光/线激光/双目最扎实的中文教材 |
+| 《计算机视觉：算法与应用》 | Szeliski | C3,C5-C6 | 领域圣经 |
+| 《Multiple View Geometry》 | Hartley & Zisserman | C6 | 多视角几何参考，难度较高 |
+| 《学习 OpenCV 3》 | Kaehler & Bradski | C0-C2 | OpenCV 工具书 |
 
 ### 深度学习
 
-| 书名 | 作者 | 说明 |
-|------|------|------|
-| 《动手学深度学习》 | 李沐等 | 中文，有代码，CNN 基础 |
-| 《深度学习》(花书) | Goodfellow | 理论经典，按需查阅 |
+| 书名 | 说明 |
+|------|------|
+| 《动手学深度学习》(李沐) | 中文有代码，CNN 基础 |
+| [CS231n](http://cs231n.stanford.edu/) | Stanford 深度学习视觉课 |
 
----
+### 线激光 / 结构光（C2）
 
-## 在线课程
-
-| 课程 | 平台 | 适合阶段 |
-|------|------|---------|
-| [First Principles of Computer Vision](https://www.youtube.com/@firstprinciplesofcomputerv3258) | YouTube | Phase 1-2 |
-| [CS231n: Deep Learning for Computer Vision](http://cs231n.stanford.edu/) | Stanford | Phase 6 |
-| [OpenCV Python Tutorials](https://docs.opencv.org/master/d6/d00/tutorial_py_root.html) | 官方文档 | Phase 1-2 |
-| [Cyrill Stachniss SLAM 课程](https://www.youtube.com/playlist?list=PLgnQpQtFTOGQrZ4O5QzbIHgl3b1JHimN_) | YouTube | Phase 3 |
-| [ROS2 Tutorials](https://docs.ros.org/en/humble/Tutorials.html) | 官方文档 | Phase 7（如果之后接 ROS）|
-
----
-
-## 传感器硬件资源
-
-### 线激光模组
-| 型号/来源 | 说明 |
-|-----------|------|
-| 淘宝 "650nm 线激光模组" | 选可调焦距的，5mW 足够，带驱动的更好 |
-| 淘宝 "一字线激光" | 另一种说法，60-90° 发散角 |
-| 带通滤光片 650nm | 装在相机镜头上，只让激光波长通过，抗环境光 |
-
-### 激光雷达（LDS）
-| 型号 | 价格 | 说明 |
-|------|------|------|
-| YDLIDAR X4 | ~300 元 | 10m 范围，5000 pts/s，三角法 |
-| RPLIDAR A1M8 | ~400 元 | 思岚入门款，12m 范围，SDK 成熟 |
-| RPLIDAR A2 | ~600 元 | 更高频率，更适合机器人 |
-| 二手扫地机拆机 LDS | ~50-100 元 | 咸鱼搜"扫地机激光头"，Roborock/Dreame 拆机件 |
-
-> 三角法雷达原理都一样，入门买 YDLIDAR X4 性价比最高。
-
-### ToF / 红外传感器
-| 型号 | 价格 | 说明 |
-|------|------|------|
-| VL53L0X 模块 | ~15 元 | I2C，2m 范围，单区 |
-| VL53L1X 模块 | ~30 元 | I2C，4m 范围，多区（ROI），推荐 |
-| Sharp GP2Y0A21 | ~25 元 | 模拟输出，10-80cm 红外三角 |
-| 红外避障模块 | ~2 元 | 简单反射式，2-30cm |
-
-### 深度相机（Phase 5 对比用）
-| 型号 | 价格 | 说明 |
-|------|------|------|
-| Intel RealSense D435 | ~1500 元 | 双目+结构光辅助 |
-| 奥比中光 Astra Pro | ~600 元 | 国产结构光方案 |
-| 两个同型号 USB 摄像头 | ~100 元 | 自己搭双目 |
-
-### 扫地机拆解参考
 | 资源 | 说明 |
 |------|------|
-| B 站 "Roborock 拆解" | 看内部传感器布局 |
-| iFixit 扫地机拆解 | 看 iRobot Roomba 结构 |
-| [Roborock 技术博客](https://blog.roborock.com/) | 官方技术介绍 |
+| [First Principles of Computer Vision](https://www.youtube.com/@firstprinciplesofcomputerv3258) | YouTube，激光三角测量讲解 |
+| [Open3D 点云教程](http://www.open3d.org/docs/latest/tutorial/) | 3D 可视化 |
+| OpenCV `cv2.projectPoints()` `cv2.triangulatePoints()` | 投影与三角测量 API |
+
+### LDS 激光雷达（C4）
+
+| 资源 | 说明 |
+|------|------|
+| [YDLIDAR 开发手册](https://www.ydlidar.com/) | Python SDK, ROS 驱动 |
+| [RPLIDAR SDK](https://github.com/Slamtec/rplidar_sdk) | 思岚官方 SDK |
+| [Hector SLAM 论文](https://wiki.ros.org/hector_slam) | scan-to-map 匹配 |
+
+### ToF / 红外（C5）
+
+| 资源 | 说明 |
+|------|------|
+| [VL53L1X Datasheet](https://www.st.com/resource/en/datasheet/vl53l1x.pdf) | ST 官方数据手册 |
+| [ST VL53L0X API 文档](https://www.st.com/resource/en/user_manual/dm00280486.pdf) | 寄存器级驱动参考 |
+
+### YOLO / AI 检测（C3）
+
+| 资源 | 说明 |
+|------|------|
+| [Ultralytics YOLO 文档](https://docs.ultralytics.com/) | 训练、导出 ONNX |
+| [NanoDet](https://github.com/RangiLyu/nanodet) | 移动端轻量检测器 |
+| [Roboflow](https://roboflow.com/) | 数据标注平台 |
 
 ---
 
-## 关键工具与库
+## Track D: 机械与硬件
 
-| 工具 | 用途 | 阶段 |
-|------|------|------|
-| OpenCV | 图像处理、相机标定、激光线提取 | Phase 1-5 |
-| NumPy | 数组计算基础 | 全阶段 |
-| Open3D | 点云处理与可视化 | Phase 2,5 |
-| Matplotlib | 数据可视化（雷达点云等）| 全阶段 |
-| PySerial | 串口通信（雷达数据读取）| Phase 3 |
-| smbus2 | I2C 通信（VL53L0X）| Phase 4 |
-| ONNX Runtime | AI 模型推理部署 | Phase 6 |
-| PyTorch | 深度学习训练 | Phase 6 |
-| Ultralytics | YOLO 训练（最简单入口）| Phase 6 |
-| ROS2 | 机器人框架（如果后续接机器人底盘）| Phase 7 |
+### 底盘与电机
 
----
+| 资源 | 说明 |
+|------|------|
+| 淘宝"差速底盘 机器人" | 带编码器电机 + 安装孔位，入门首选 |
+| 咸鱼"扫地机 拆机 底盘" | 二手扫地机拆机件，性价比高 |
+| TB6612 / L298N 电机驱动 | 淘宝搜型号即可 |
+| [直流电机 PID 控制](https://www.embedded.com/pid-control-for-dc-motors/) | 理论参考 |
 
-## 数据集
+### 供电
 
-| 数据集 | 内容 | 用途 |
-|--------|------|------|
-| [COCO](https://cocodataset.org/) | 80 类通用检测 | Phase 6 预训练基准 |
-| [TACO](http://tacodataset.org/) | 户外垃圾数据集 | 可借鉴做障碍物检测 |
-| 自采集数据 | 贴地视角拍线缆/鞋子 | Phase 6 核心训练数据 |
+| 资源 | 说明 |
+|------|------|
+| 淘宝"12V 锂电池 机器人" | 选带保护板的 |
+| LM2596 / MINI560 降压模块 | 12V→5V 给 Pi 供电 |
+
+### 传感器硬件
+
+| 用途 | 型号/关键词 | 价格 |
+|------|-----------|------|
+| 线激光 | 淘宝"650nm 一字线激光 USB" | ~15-50 元 |
+| LDS 雷达 | 淘宝"YDLIDAR X4" | ~300 元 |
+| ToF 测距 | 淘宝"VL53L1X 模块" | ~30 元 |
+| 红外避障 | 淘宝"红外避障模块" | ~2 元/对 |
+| 碰撞检测 | 微动开关 | ~1 元 |
+| 滤光片 | 650nm 带通滤光片 | ~10 元 |
 
 ---
 
@@ -108,13 +147,13 @@
 
 ### 主流产品传感器配置
 
-| 产品 | LDS | 线激光 | RGB 相机 | 红外悬崖 | ToF | 备注 |
-|------|-----|--------|----------|----------|-----|------|
-| Roborock S8 | 有 | 有 | 有 | 有 | - | 3D 避障 |
-| Roborock Q Revo | 有 | - | - | 有 | - | 基础型号 |
-| Dreame X40 | 有 | 有 | 有 | 有 | - | 线激光+AI |
-| iRobot Roomba j7+ | - | - | 有 | 有 | - | 纯视觉方案 |
-| Ecovacs X2 | 有 | 有 | 有 | 有 | - | 半固态雷达 |
+| 产品 | LDS | 线激光 | RGB 相机 | 红外悬崖 | ToF |
+|------|-----|--------|----------|----------|-----|
+| Roborock S8 | 有 | 有 | 有 | 有 | - |
+| Roborock Q Revo | 有 | - | - | 有 | - |
+| Dreame X40 | 有 | 有 | 有 | 有 | - |
+| iRobot Roomba j7+ | - | - | 有 | 有 | - |
+| Ecovacs X2 | 有 | 有 | 有 | 有 | - |
 
 ### 关键供应商
 
@@ -125,18 +164,50 @@
 | ST意法半导体 | VL53L0X/VL53L1X ToF | 扫地机悬崖传感器常用 |
 | 奥比中光 | 深度相机 | 3D 结构光方案 |
 
+### 拆解参考
+
+| 资源 | 说明 |
+|------|------|
+| B 站"Roborock 拆解" | 看内部传感器布局 |
+| B 站"扫地机拆机评测" | 大量拆解视频 |
+| iFixit 扫地机拆解 | 看 iRobot Roomba 结构 |
+| [Roborock 技术博客](https://blog.roborock.com/) | 官方技术介绍 |
+
+---
+
+## 关键工具与库
+
+| 工具 | 用途 | 轨道 |
+|------|------|------|
+| OpenCV | 图像处理、相机标定、激光线提取 | C |
+| NumPy | 数组计算基础 | C |
+| Open3D | 点云处理与可视化 | C |
+| Matplotlib | 数据可视化 | C |
+| PySerial | 串口通信（LDS 雷达）| C |
+| smbus2 | I2C 通信（VL53L0X）| C |
+| ONNX Runtime | AI 模型推理部署 | C |
+| PyTorch | 深度学习训练 | C |
+| Ultralytics | YOLO 训练 | C |
+| ROS2 Humble | 机器人框架 | B |
+| rclpy | ROS2 Python 客户端库 | B |
+| SLAM Toolbox | 2D SLAM | B |
+| Nav2 | 导航栈 | B |
+| Keil MDK | STM32 IDE | A |
+| STM32CubeMX | 外设初始化代码 | A |
+| 树莓派 Imager | 烧录系统 | B |
+
 ---
 
 ## 中文社区
 
 | 资源 | 说明 |
 |------|------|
+| [鱼香 ROS](https://fishros.org/) | 中文 ROS/ROS2 学习社区 |
 | [自动驾驶之心](https://www.zdjszx.com/) | 感知方向中文社区 |
-| 知乎 "扫地机器人" 话题 | 产品测评、技术讨论 |
-| B 站 "扫地机拆机评测" | 大量拆解视频 |
+| 知乎"扫地机器人"话题 | 产品测评、技术讨论 |
+| B 站"STM32 平衡车" | 大量项目实操视频 |
 | 52pojie 扫地机逆向 | 协议分析和破解 |
-
----
+| [OpenRobotics 社区](https://discourse.ros.org/) | ROS 官方论坛 |
 
 ## 云 GPU 平台
 
