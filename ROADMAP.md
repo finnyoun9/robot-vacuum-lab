@@ -9,12 +9,12 @@
 | **Mac**（主力机） | OpenCV/视觉开发、写代码、项目管理 | Python/OpenCV/NumPy，Phase 0-2 完成 |
 | **Mac 上的 Linux VM** | ROS2 学习与开发 | 已安装，ROS2 学习中 |
 | **Windows** | STM32 开发（Keil/源码/接线图） | 江科大课程 + 平衡车项目进行中 |
-| **树莓派 5**（待采购） | 最终 ROS2 部署平台 | 准备采购 |
+| **Linux 开发板**（待采购） | 最终 ROS2 部署平台 | 延后采购，到 B1 学完再定型号 |
 
 ## 系统架构
 
 ```
-树莓派 5 (ROS2 Humble)  ← SLAM、导航、视觉、状态机
+Linux 开发板 (ROS2 Humble)  ← SLAM、导航、视觉、状态机
        │ UART
 STM32                    ← 电机 PID、IMU、悬崖/碰撞传感器、编码器、电池
 ```
@@ -64,13 +64,13 @@ Track E (集成):           等 A+B+C+D 就绪 ──→ 联调 → Demo
 
 ## Track B: ROS2 + 导航（上位机软件）
 
-> **环境**：Mac 上的 Linux VM（学习+开发）→ 树莓派 5（最终部署）
+> **环境**：Mac 上的 Linux VM（学习+开发）→ Linux 开发板（最终部署）
 > ROS2 已在虚拟机中开始学习
 
-### Phase B0 — 树莓派 5 入门
-- 采购 + 烧录 Ubuntu 22.04 + ROS2 Humble + SSH/VS Code Remote
+### Phase B0 — Linux 开发板入门
+- 采购 Linux 开发板 + 烧录 Ubuntu 22.04 + ROS2 Humble + SSH/VS Code Remote
 
-**硬件**：树莓派 5 8GB + 电源 + 128GB MicroSD
+**硬件**：Orange Pi 3B / Radxa Rock 3A 等（~200-350 元），或二手 x86 Mini PC（~300-500 元）
 
 ### Phase B1 — ROS2 核心概念 🔄 学习中
 - Publisher/Subscriber/Service/Action + Launch 文件 + QoS
@@ -109,7 +109,7 @@ Track E (集成):           等 A+B+C+D 就绪 ──→ 联调 → Demo
 
 ### Phase C0–C1 ✅ 已完成
 - 相机基础、2D 图像处理、相机标定
-- 代码：[`code/phase0_camera_test.py`](code/phase0_camera_test.py)、[`code/phase1_basics.py`](code/phase1_basics.py)、[`code/phase1_contours.py`](code/phase1_contours.py)、[`code/phase1_doc_scanner.py`](code/phase1_doc_scanner.py)、[`code/phase1_calibration.py`](code/phase1_calibration.py) + `code/calib_result.npz`
+- 代码：[`code/perception/phase0_camera_test.py`](code/perception/phase0_camera_test.py)、[`code/perception/phase1_basics.py`](code/perception/phase1_basics.py)、[`code/perception/phase1_contours.py`](code/perception/phase1_contours.py)、[`code/perception/phase1_doc_scanner.py`](code/perception/phase1_doc_scanner.py)、[`code/perception/phase1_calibration.py`](code/perception/phase1_calibration.py) + `code/perception/calib_result.npz`
 
 ### Phase C2 — 线激光三角测量 🔄 下一步
 - 激光线中心提取（灰度重心法 → 高斯拟合 → Steger）
@@ -152,7 +152,7 @@ Roborock ReactiveAI / Dreame 避障系统：线激光发射器在前方投射一
 
 ### Phase C3 ✅ YOLO 检测已完成
 - YOLOv8n ONNX 实时推理，80 类 COCO 物体
-- 代码：[`code/phase2_yolo_detect.py`](code/phase2_yolo_detect.py)
+- 代码：[`code/perception/phase2_yolo_detect.py`](code/perception/phase2_yolo_detect.py)
 
 ### Phase C4 — LDS 激光雷达 + 建图
 - 串口读取 LDS → 极坐标可视化 → 发布 ROS2 LaserScan topic
@@ -231,14 +231,14 @@ Pi 发速度指令 → STM32 PID 执行 → 编码器回传
 | 已有 | USB 摄像头 | — | C 全部 |
 | 立即 | 650nm 一字线激光 USB | ~15-50 元 | C2 |
 | 立即 | VL53L1X ToF 模块 | ~30 元 | C5 |
-| 近期 | 树莓派 5 8GB + 电源 + 128GB SD | ~650 元 | B 全部 |
+| 近期 | Linux 开发板（Orange Pi 3B 等）| ~200-350 元 | B 全部 |
 | 近期 | YDLIDAR X4 | ~300 元 | C4+B4 |
 | 中期 | 差速底盘 + 电机驱动板 | ~300-500 元 | D1 |
 | 中期 | 红外避障模块 ×4 | ~10 元 | C5 |
 | 后期 | 12V 锂电池 + 降压模块 | ~150 元 | D2 |
 | 后期 | 吸尘/滚刷电机 + 驱动 | ~100 元 | E3 |
 
-**总计**：~1,600-1,800 元（平衡车硬件已有，不需要额外买 STM32 套件）
+**总计**：~1,100-1,400 元（平衡车硬件已有，Linux 板选 Orange Pi 3B 等平替方案）
 
 ---
 
@@ -249,16 +249,17 @@ Pi 发速度指令 → STM32 PID 执行 → 编码器回传
 ├── A1: 平衡车调试                    ← Windows, 江科大课程
 ├── B1: ROS2 核心概念                  ← Mac VM, 已开始
 ├── C2: 线激光 3D 扫描                 ← Mac, 立即开始
-└── 采购线激光 + ToF + 树莓派
+└── 采购线激光 + ToF
 
 第 2 个月
 ├── A1→A2: 平衡车完成 → PID 经验总结
-├── B0: 树莓派 5 开箱 + 环境搭建
-├── B2-B3: TF2 + 传感器 ROS2 驱动
+├── B1: 继续 ROS2 核心学习（VM）
+├── B0: 采购 Linux 开发板 + 环境搭建
 ├── C4: 买 LDS + 点云可视化
 └── C5: ToF + 红外实验
 
 第 3 个月
+├── B2-B3: TF2 + 传感器 ROS2 驱动（迁移到 Linux 板）
 ├── A3: Pi-STM32 串口协议
 ├── D1-D2: 买底盘组装 + 供电
 ├── B4-B5: SLAM + Nav2

@@ -51,13 +51,23 @@
 | [Cyrill Stachniss SLAM 课程](https://www.youtube.com/playlist?list=PLgnQpQtFTOGQrZ4O5QzbIHgl3b1JHimN_) | SLAM 理论，YouTube 上最系统 |
 | 《Probabilistic Robotics》(Thrun) | SLAM 和状态估计圣经 |
 
-### 树莓派
+### Linux 开发板
+
+树莓派 5 目前价格偏高（~650 元），性价比更好的替代方案：
+
+| 方案 | 价格 | 说明 |
+|------|------|------|
+| Orange Pi 3B (RK3566, 4GB) | ~220 元 | 推荐，Ubuntu + ROS2 够用 |
+| Radxa Rock 3A (RK3568, 4GB) | ~250-350 元 | 性能略强于 Pi 4B |
+| 二手 Mini PC (x86) | ~300-500 元 | 原生 x86，最省事 |
+| 树莓派 5 8GB | ~650 元 | 原方案，当前性价比低 |
 
 | 资源 | 说明 |
 |------|------|
-| [树莓派 5 官方文档](https://www.raspberrypi.com/documentation/) | 硬件、系统烧录 |
-| [Raspberry Pi Imager](https://www.raspberrypi.com/software/) | 烧录 Ubuntu 22.04 Server |
-| Ubuntu 22.04 ARM64 镜像 | 用于 Pi 5，直接在 Imager 里选 |
+| [Orange Pi 官方文档](http://www.orangepi.org/) | 硬件、系统烧录 |
+| [Armbian](https://www.armbian.com/) | 多板型通用 Ubuntu 镜像 |
+| [Raspberry Pi Imager](https://www.raspberrypi.com/software/) | 烧录工具（树莓派专用）|
+| Ubuntu 22.04 ARM64 / x86 镜像 | 选对应架构的镜像烧录 |
 
 ---
 
@@ -194,7 +204,7 @@
 | Nav2 | 导航栈 | B |
 | Keil MDK | STM32 IDE | A |
 | STM32CubeMX | 外设初始化代码 | A |
-| 树莓派 Imager | 烧录系统 | B |
+| 烧录工具 (Armbian/Imager) | 烧录系统 | B |
 
 ---
 
