@@ -1,0 +1,39 @@
+# Keil/MDK build outputs
+*.o
+*.d
+*.crf
+*.lnp
+*.axf
+*.hex
+*.bin
+*.map
+*.lst
+*.dep
+*.htm
+*.sct
+*.build_log.htm
+
+# Keil project files
+*.uvguix.*
+*.uvoptx
+*.uvprojx
+*.uvmpw
+*.dbgconf
+*.uvguix*
+
+# Build folders
+Objects/
+Listings/
+DebugConfig/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.bak
