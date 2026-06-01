@@ -1,0 +1,283 @@
+# 从零构建扫地机器人 — 完整学习路线
+
+> 目标：从零做一个真正的扫地机器人。分五条轨道并行推进，覆盖嵌入式 STM32、ROS2 导航、传感器感知、机械硬件、系统集成。
+
+## 开发环境
+
+| 机器 | 用途 | 当前状态 |
+|------|------|---------|
+| **Mac**（主力机） | OpenCV/视觉开发、写代码、项目管理 | Python/OpenCV/NumPy，Phase 0-2 完成 |
+| **Mac 上的 Linux VM** | ROS2 学习与开发 | 已安装，ROS2 学习中 |
+| **Windows** | STM32 开发（Keil/源码/接线图） | 江科大课程 + 平衡车项目进行中 |
+| **Linux 开发板**（待采购） | 最终 ROS2 部署平台 | 延后采购，到 B1 学完再定型号 |
+
+## 系统架构
+
+```
+Linux 开发板 (ROS2 Humble)  ← SLAM、导航、视觉、状态机
+       │ UART
+STM32                    ← 电机 PID、IMU、悬崖/碰撞传感器、编码器、电池
+```
+
+## 五条轨道概览
+
+```
+Track A (STM32/Windows):  平衡车 ──→ PID迁移 ──→ 串口协议 ──→ 扫地机外设
+Track B (ROS2/VM → Pi):   ROS2核心 ──→ TF2+驱动 ──→ SLAM+Nav2 ──→ 状态机
+Track C (感知/Mac):       线激光 ──→ LDS ──→ ToF ──→ 传感器融合
+Track D (硬件):           底盘 ──→ 供电 ──→ 安装布线
+Track E (集成):           等 A+B+C+D 就绪 ──→ 联调 → Demo
+```
+
+---
+
+## Track A: 嵌入式 STM32（下位机）
+
+> **环境**：Windows（Keil + 源码 + 接线图）
+> **载体**：江科大 STM32 基础课程 → 平衡车项目（已购整套硬件，调试中）
+> 平衡车覆盖：PWM 电机控制、MPU6050 姿态解算、PID 闭环、编码器。调通平衡车 = STM32 基本功过关。
+
+### Phase A1 — 完成平衡车项目 🔄 进行中
+- GPIO/PWM/编码器/UART/I2C/ADC
+- MPU6050 姿态解算（DMP 或 Mahony 互补滤波）
+- 直立环 + 速度环 PID 调参
+
+**验证**：平衡车站立不倒，能遥控行走
+
+### Phase A2 — 电机 PID 迁移
+- 平衡车 PID 经验迁移到差速底盘
+- 增量式 PI 速度控制器
+
+**验证**：2m 直线偏航 < 5°
+
+### Phase A3 — Pi-STM32 串口协议
+- 二进制协议帧（帧头+长度+命令+数据+校验），50Hz 双向通信
+
+**验证**：10 分钟持续通信不掉帧
+
+### Phase A4 — 扫地机专用外设
+- ADC 读悬崖红外、电池电压 / GPIO 读碰撞传感器
+
+**验证**：所有传感器数据正确上报到 Pi
+
+---
+
+## Track B: ROS2 + 导航（上位机软件）
+
+> **环境**：Mac 上的 Linux VM（学习+开发）→ Linux 开发板（最终部署）
+> ROS2 已在虚拟机中开始学习
+
+### Phase B0 — Linux 开发板入门
+- 采购 Linux 开发板 + 烧录 Ubuntu 22.04 + ROS2 Humble + SSH/VS Code Remote
+
+**硬件**：Orange Pi 3B / Radxa Rock 3A 等（~200-350 元），或二手 x86 Mini PC（~300-500 元）
+
+### Phase B1 — ROS2 核心概念 🔄 学习中
+- Publisher/Subscriber/Service/Action + Launch 文件 + QoS
+
+**验证**：独立写出 ROS2 Python 节点
+
+### Phase B2 — TF2 坐标变换
+- 静态/动态 TF，完整 TF 树：`map → odom → base_link → laser_link / camera_link / imu_link`
+
+**验证**：RViz 中 TF 树完整
+
+### Phase B3 — 传感器 ROS2 驱动
+- LDS → `sensor_msgs/LaserScan`，摄像头 → `sensor_msgs/Image`（cv_bridge）
+- IMU → `sensor_msgs/Imu`，里程计 → `nav_msgs/Odometry`
+
+**验证**：RViz 中所有传感器数据实时更新
+
+### Phase B4 — SLAM 建图
+- SLAM Toolbox / Cartographer，保存/加载地图（map_server）
+
+**验证**：生成可用的 2D 占据栅格地图
+
+### Phase B5 — Nav2 导航
+- Global planner + local planner + costmap
+
+**验证**：已知地图 A→B 自主导航成功
+
+### Phase B6 — 清扫行为树
+- 弓字形覆盖 → 沿边 → 回充
+
+**验证**：完整清扫流程自动运行
+
+---
+
+## Track C: 感知（传感器逐一打通）
+
+### Phase C0–C1 ✅ 已完成
+- 相机基础、2D 图像处理、相机标定
+- 代码：[`code/perception/phase0_camera_test.py`](code/perception/phase0_camera_test.py)、[`code/perception/phase1_basics.py`](code/perception/phase1_basics.py)、[`code/perception/phase1_contours.py`](code/perception/phase1_contours.py)、[`code/perception/phase1_doc_scanner.py`](code/perception/phase1_doc_scanner.py)、[`code/perception/phase1_calibration.py`](code/perception/phase1_calibration.py) + `code/perception/calib_result.npz`
+
+### Phase C2 — 线激光三角测量 🔄 下一步
+- 激光线中心提取（灰度重心法 → 高斯拟合 → Steger）
+- 光平面标定 → 三角测量 → 运动扫描 3D 点云 → Open3D 可视化
+
+**硬件**：650nm 一字线激光模组 USB 口（~15-50 元）
+**验证**：扫描手机/杯子，3D 轮廓可见
+
+### 扫地机中线激光的应用
+Roborock ReactiveAI / Dreame 避障系统：线激光发射器在前方投射一条横线，红外相机从侧面观察激光线的形变，通过三角测量计算出每个位置的 3D 高度。
+
+```
+                激光发射器
+                   |
+                   | 投射一条横线
+                   v
+    ════════════════════════════  ← 激光线投射到地面/障碍物
+              /\
+             /  \  相机从上方看到激光线弯折
+            /    \
+          相机 (侧上方)
+```
+
+#### 激光三角测量原理
+- **基本几何**：激光投射点 → 物体表面反射 → 相机成像点，三者构成三角形
+- **核心公式**：`Z = (B * f) / (x + B * f / Z₀)`（B=基线距离，f=焦距，x=像点偏移）
+- **光平面标定**：确定激光平面在相机坐标系中的位置
+- **线激光 vs 点激光 vs 结构光**：速度、精度、成本对比
+
+#### 激光线中心提取
+- 灰度重心法（最常用，简单）
+- 高斯拟合法（亚像素精度）
+- Steger 算法（亚像素精度，工业标准）
+
+#### 动手练习
+1. 激光线照在桌面上，提取激光线中心像素坐标
+2. 用棋盘格 + 激光线照片，标定光平面参数
+3. 激光线照在台阶状物体上，算出 3D 高度
+4. 固定传感器，移动物体，生成完整 3D 点云
+
+### Phase C3 ✅ YOLO 检测已完成
+- YOLOv8n ONNX 实时推理，80 类 COCO 物体
+- 代码：[`code/perception/phase2_yolo_detect.py`](code/perception/phase2_yolo_detect.py)
+
+### Phase C4 — LDS 激光雷达 + 建图
+- 串口读取 LDS → 极坐标可视化 → 发布 ROS2 LaserScan topic
+- 跑 SLAM Toolbox 建图
+
+**硬件**：YDLIDAR X4 (~300 元)
+
+#### 三角法激光雷达原理
+- 激光发射 → 物体反射 → 镜头汇聚到线阵 CMOS/CCD → 光斑位置对应距离
+- 距离越近 → 反射光斑在传感器上的偏移越大
+- 与 ToF 雷达对比：三角法便宜但精度随距离下降（0.1-10m），ToF 精度稳定但贵
+
+### Phase C5 — ToF + 红外传感器
+- VL53L1X I2C 测距 / 红外对管颜色/材质反射率对比实验 / 悬崖检测逻辑
+
+**硬件**：VL53L1X (~30 元) + 红外避障模块 (~5 元)
+
+#### 传感器对比
+| 类型 | 范围 | 精度 | 受颜色影响 | 成本 |
+|------|------|------|-----------|------|
+| 红外对管（反射式）| 1-15cm | 低 | 严重 | ~1 元 |
+| 红外三角（Sharp）| 10-150cm | 中 | 中等 | ~30 元 |
+| ToF（VL53L0X）| 3-200cm | 高(±3%) | 几乎无 | ~15 元 |
+| 超声波 | 2-400cm | 低 | 无 | ~5 元 |
+
+### Phase C6 — 传感器融合
+- 相机-LDS 外参标定 / 线激光 3D 点云投影到 2D 地图 / AI 检测框 → 地图坐标
+- 统一障碍物列表：`(x, y, z, class, confidence, source)`
+
+**验证**：多传感器标注同一障碍物，位置一致
+
+---
+
+## Track D: 机械与硬件
+
+### Phase D1 — 底盘
+- 差速底盘套件（~300-500 元），带编码器电机 + 安装孔位
+- 备选：咸鱼二手扫地机拆底盘（~100-200 元）
+- 电机驱动板 TB6612/L298N
+
+### Phase D2 — 供电
+- 12V 锂电池 + 5V 降压模块（LM2596/MINI560）
+- 电压监控（ADC → 低电量上报）
+
+### Phase D3 — 传感器安装布线
+- LDS 顶部无遮挡 360° / 线激光+相机前方朝下 15°
+- 悬崖传感器底盘底部 ×4 / 碰撞传感器前方保险杠
+
+---
+
+## Track E: 系统集成
+
+### Phase E1 — Pi-STM32 联调
+Pi 发速度指令 → STM32 PID 执行 → 编码器回传
+
+**验证**：1m 直线偏差 < 5cm，360° 旋转偏差 < 10°
+
+### Phase E2 — 全系统 ROS2 上线
+所有节点启动，TF 树完整，RViz 全传感器实时显示
+
+**验证**：10 分钟稳定运行不崩溃
+
+### Phase E3 — 自主清扫 Demo
+建图 + 弓字形覆盖 + 避障 + 低电量停靠
+
+**验证**：10m² 房间覆盖率 > 70%，不撞墙
+
+---
+
+## 硬件采购总表
+
+| 状态 | 硬件 | 价格 | 用途 |
+|------|------|------|------|
+| 已有 | Mac + Linux VM + Windows | — | 开发环境 |
+| 已有 | STM32 + MPU6050 + 电机等 | — | 平衡车项目（A1）|
+| 已有 | USB 摄像头 | — | C 全部 |
+| 立即 | 650nm 一字线激光 USB | ~15-50 元 | C2 |
+| 立即 | VL53L1X ToF 模块 | ~30 元 | C5 |
+| 近期 | Linux 开发板（Orange Pi 3B 等）| ~200-350 元 | B 全部 |
+| 近期 | YDLIDAR X4 | ~300 元 | C4+B4 |
+| 中期 | 差速底盘 + 电机驱动板 | ~300-500 元 | D1 |
+| 中期 | 红外避障模块 ×4 | ~10 元 | C5 |
+| 后期 | 12V 锂电池 + 降压模块 | ~150 元 | D2 |
+| 后期 | 吸尘/滚刷电机 + 驱动 | ~100 元 | E3 |
+
+**总计**：~1,100-1,400 元（平衡车硬件已有，Linux 板选 Orange Pi 3B 等平替方案）
+
+---
+
+## 学习时间线
+
+```
+第 1 个月（现在）
+├── A1: 平衡车调试                    ← Windows, 江科大课程
+├── B1: ROS2 核心概念                  ← Mac VM, 已开始
+├── C2: 线激光 3D 扫描                 ← Mac, 立即开始
+└── 采购线激光 + ToF
+
+第 2 个月
+├── A1→A2: 平衡车完成 → PID 经验总结
+├── B1: 继续 ROS2 核心学习（VM）
+├── B0: 采购 Linux 开发板 + 环境搭建
+├── C4: 买 LDS + 点云可视化
+└── C5: ToF + 红外实验
+
+第 3 个月
+├── B2-B3: TF2 + 传感器 ROS2 驱动（迁移到 Linux 板）
+├── A3: Pi-STM32 串口协议
+├── D1-D2: 买底盘组装 + 供电
+├── B4-B5: SLAM + Nav2
+└── C6: 传感器融合
+
+第 4 个月+
+├── A4: 扫地机专用外设
+├── E1-E3: 全系统联调
+├── B6: 清扫状态机
+└── D3: 最终硬件安装
+```
+
+## 验证里程碑
+
+| 里程碑 | 怎么验证 | 标准 |
+|--------|---------|------|
+| A1 | 平衡车站立 + 行走 | 不倒地 |
+| C2 | 线激光扫杯子 → Open3D | 3D 轮廓可见 |
+| C4+B4 | SLAM Toolbox 建图 | 房间地图清晰 |
+| A3+E1 | Pi 发指令 → 轮子转 | 走直线 1m ±5cm |
+| E3 | 房间自主清扫 | 覆盖率 > 70%，不撞墙 |

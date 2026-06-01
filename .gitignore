@@ -26,6 +26,19 @@ Objects/
 Listings/
 DebugConfig/
 
+# Python
+venv/
+__pycache__/
+
+# Images
+*.jpg
+*.png
+!pattern.png
+
+# Models
+*.onnx
+code/calib_images/
+
 # OS files
 .DS_Store
 Thumbs.db
