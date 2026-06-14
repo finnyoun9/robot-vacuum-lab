@@ -58,6 +58,18 @@ robot-vacuum-lab/
 | E1 | 上位机发指令 → 轮子转 | 走直线 1m ±5cm |
 | E3 | 房间自主清扫 | 覆盖率 > 70%，不撞墙 |
 
+## 🔗 相关仓库（2026-06 拆分后）
+
+本项目是"扫地机器人 Capstone"主仓库。学习笔记、基础知识、硬件设计已拆分到：
+
+| 仓库 | 内容 |
+|------|------|
+| 📚 [embedded-notes](https://github.com/finnyoun9/embedded-notes) | 学习笔记、路线规划、面试八股 |
+| 🔵 [stm32-from-scratch](https://github.com/finnyoun9/stm32-from-scratch) | STM32 裸机 + FreeRTOS |
+| 🟢 [esp32-playground](https://github.com/finnyoun9/esp32-playground) | ESP32/Arduino 实验 |
+| 🔧 [hardware-lab](https://github.com/finnyoun9/hardware-lab) | 原理图/仿真/PCB |
+| 🔬 [theory-lab](https://github.com/finnyoun9/theory-lab) | 数电模电理论 |
+
 ## 原则
 
 1. **跑通 > 看懂** — 代码能跑比理论精通重要

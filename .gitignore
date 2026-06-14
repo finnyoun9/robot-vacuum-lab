@@ -50,3 +50,14 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.bak
+
+# Binary data archives (keep out of git)
+*.pptx
+*.pdf
+*.zip
+*.elf
+
+# Hermes plans
+.hermes/
+.mcp.json
+.codex/
