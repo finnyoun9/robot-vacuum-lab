@@ -76,3 +76,7 @@ robot-vacuum-lab/
 2. **一 Phase 不完成不进下个** — 验证标准不打折
 3. **笔记写 notes/，代码写 code/** — 不让知识散落
 4. **完成 > 完美** — 做完了比想得很完美但没动手强
+
+## 2026-08 更新：与 OOMWOO 的对照
+
+OOMWOO 与本项目同样采用“树莓派/ROS 2 上位机 + STM32 实时下位机 + 2D LiDAR + 3D 打印”的分层路线；详细对照、扫地机专用工具链和分阶段复用策略见 [notes/oomwoo-reference-and-toolchain.md](notes/oomwoo-reference-and-toolchain.md)。
